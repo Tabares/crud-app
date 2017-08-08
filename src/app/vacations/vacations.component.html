@@ -2,6 +2,9 @@
   Welcomen {{  currentUser  }}
 
 </h1>
+<button (click)="postData()">Save options</button>
+  <h3>My Current Trip</h3>
+  <p  *ngIf="(currentGetTripObserver$ | async) ">{{ currentGetTripObserver$ | async | json }}</p>
 
 
 <section class="page-content">
@@ -9,6 +12,8 @@
       <h2>Travel Packages</h2>
         <div class="refreshContainer">
           <button (click)="refreshData()">Refresh Data</button>
+
+
         </div>
         <img *ngIf="!(destinations.length > 0)" class="ajax-loader-boot" src="http://www.hettweb.com/images/loader.gif" alt="">
         <ul class="destinations">

@@ -1,4 +1,4 @@
-import { Http, Headers, BaseRequestOptions, } from '@angular/http';
+import { Http, Headers, BaseRequestOptions, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import {Subject} from 'rxjs/Subject';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -17,10 +17,38 @@ export class TripsService {
       .map(res => res.json());
   }
 
-  saveTrip(): Observable<any> {
+  updateTripService(id: string): Observable<any>  {
+    const data = {
+      'country': 'Los angeles',
+      'price': '1,200'
+    };
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const options = new RequestOptions({ headers: headers });
+
     return this.http
-      .get('https://api.myjson.com/bins')
+      .put(`https://api.myjson.com/bins/${id}`, data, options)
       .map(res => res.json());
+  }
+
+  saveTrip(): Observable<any> {
+    const data = {
+      'country': 'Los angeles',
+      'price': '1,200'
+    };
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const options = new RequestOptions({ headers: headers });
+
+    return this.http
+      .post('https://api.myjson.com/bins', data, options)
+      .map(res => res.json());
+  }
+
+  getCurrentTrip( url: string ): Observable<any> {
+    return this.http
+      .get( url )
+      .map((res) => {
+        return res.json();
+      });
   }
 
   loadAllPackages () {

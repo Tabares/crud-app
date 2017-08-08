@@ -17,6 +17,9 @@ export class VacationsComponent implements OnInit {
 
   destinations: Array<Trip> = [];
   private usersObserver$: BehaviorSubject<any> = new BehaviorSubject(null);
+  private currentGetTripObserver$: BehaviorSubject<any> = new BehaviorSubject(null);
+  public lastkey: string;
+
   public user: Observable<any> = this.usersObserver$.asObservable();
   public currentUser: string;
   constructor(private tripsService: TripsService) { }
@@ -44,6 +47,25 @@ export class VacationsComponent implements OnInit {
       (err: any) => console.error('ERROR')
       );
 
+  }
+
+  postData() {
+    this.tripsService.saveTrip()
+      .subscribe( (val) => {
+        if (val) {
+          this.lastkey = val['uri'];
+          this.getCurrentTrip( this.lastkey );
+        }
+      });
+  }
+
+  getCurrentTrip(url) {
+    this.tripsService.getCurrentTrip(url).subscribe(
+      (val: any) => {
+        this.currentGetTripObserver$.next(val);
+      },
+      (err: any) => console.error('ERROR')
+    );
   }
 
   refreshData() {
