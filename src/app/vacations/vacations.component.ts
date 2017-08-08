@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { TripsService } from './../services/trips.service';
 import { Trip } from './trip';
+import { BehaviorSubject} from 'rxjs/BehaviorSubject';
+import { Observable } from 'rxjs/Observable';
+
 import * as _ from 'lodash';
 
 
@@ -13,7 +16,9 @@ import * as _ from 'lodash';
 export class VacationsComponent implements OnInit {
 
   destinations: Array<Trip> = [];
-
+  private usersObserver$: BehaviorSubject<any> = new BehaviorSubject(null);
+  public user: Observable<any> = this.usersObserver$.asObservable();
+  public currentUser: string;
   constructor(private tripsService: TripsService) { }
 
   ngOnInit() {
@@ -28,6 +33,17 @@ export class VacationsComponent implements OnInit {
     });
 
     this.tripsService.loadAllPackages();
+
+    this.tripsService.getUsersService().subscribe(
+      (data: any) => {
+        console.log(data);
+        this.usersObserver$.next(data);
+        const userInfo = this.usersObserver$.getValue()[0];
+        this.currentUser = userInfo.firstName + ' ' + userInfo.lastName;
+      },
+      (err: any) => console.error('ERROR')
+      );
+
   }
 
   refreshData() {
