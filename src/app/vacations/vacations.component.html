@@ -1,0 +1,21 @@
+<h1>
+  vacations works!
+</h1>
+<section class="page-content">
+  <div class="destinations-container">
+      <h2>Travel Packages</h2>
+        <div class="refreshContainer">
+          <button (click)="refreshData()">Refresh Data</button>
+        </div>
+        <img *ngIf="!(destinations.length > 0)" class="ajax-loader-boot" src="http://www.hettweb.com/images/loader.gif" alt="">
+        <ul class="destinations">
+          <li *ngFor="let destination of destinations" class="destination">
+            <div class="box destination-wrapper">
+              <span class="flag {{destination.countryCode}}"></span>
+              <span><strong>{{destination.name}}</strong> </span>
+              <span>{{destination.duration}} for <span class="currency">$</span><span class="price">{{destination.price}}</span></span>
+            </div>
+          </li>
+        </ul>
+  </div>
+</section>
