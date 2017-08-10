@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TripsService } from './../services/trips.service';
 import { Trip } from './trip';
 import { BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+
+
 
 import * as _ from 'lodash';
 
@@ -13,14 +17,19 @@ import * as _ from 'lodash';
   styleUrls: ['./vacations.component.css'],
   providers: [TripsService]
 })
-export class VacationsComponent implements OnInit {
+export class VacationsComponent implements OnInit, OnDestroy {
 
   destinations: Array<Trip> = [];
   private usersObserver$: BehaviorSubject<any> = new BehaviorSubject(null);
   private currentGetTripObserver$: BehaviorSubject<any> = new BehaviorSubject(null);
+
+  private logUpdates$: ReplaySubject<any> = new ReplaySubject(null);
+
   public lastkey: string;
 
   public user: Observable<any> = this.usersObserver$.asObservable();
+  public user$: Observer<any>;
+
   public currentUser: string;
   constructor(private tripsService: TripsService) { }
 
@@ -34,6 +43,7 @@ export class VacationsComponent implements OnInit {
         this.sortByPrice();
         }, 1500);
     });
+
 
     this.tripsService.loadAllPackages();
 
@@ -59,6 +69,30 @@ export class VacationsComponent implements OnInit {
       });
   }
 
+  updateData(country: string, price: string) {
+    const data = {
+      'country': country,
+      'price': price
+    };
+
+    this.tripsService.updateTripService(this.lastkey, data)
+      .subscribe((val) => {
+        this.currentGetTripObserver$.next(val);
+        setTimeout(
+          () => {
+             this.logUpdates$.next(val);
+             //this.history(val);
+
+          }, 3000
+        );
+
+      });
+  }
+
+  history(v: any) {
+     this.tripsService.x$.subscribe(val => console.log(val) );
+  }
+
   getCurrentTrip(url) {
     this.tripsService.getCurrentTrip(url).subscribe(
       (val: any) => {
@@ -79,6 +113,10 @@ export class VacationsComponent implements OnInit {
         return parseInt(d['price'].replace(',', ''), 10);
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.tripsService.packageData.unsubscribe();
   }
 
 }

@@ -3,13 +3,25 @@ import 'rxjs/add/operator/map';
 import {Subject} from 'rxjs/Subject';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
+import {Observer} from 'rxjs/Observer';
 import { Injectable } from '@angular/core';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+
+
 
 
 @Injectable()
 export class TripsService {
   packageData: Subject<any> = new BehaviorSubject<any>([]);
-  constructor(private http: Http) { }
+  observer$: Observer<any>;
+  public x$: ReplaySubject<any> = new ReplaySubject(null);
+
+  private data: Observable<any>;
+  private dataObserver: Observer<any>;
+
+  constructor(private http: Http) {
+    this.data = new Observable(observer => this.dataObserver = observer);
+  }
 
   getUsersService(): Observable<any>  {
     return this.http
@@ -17,16 +29,15 @@ export class TripsService {
       .map(res => res.json());
   }
 
-  updateTripService(id: string): Observable<any>  {
-    const data = {
-      'country': 'Los angeles',
-      'price': '1,200'
-    };
+
+  updateTripService(uri: string, data: any): Observable<any>  {
+
+    const updatedData = JSON.stringify(data);
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers });
 
     return this.http
-      .put(`https://api.myjson.com/bins/${id}`, data, options)
+      .put(uri, updatedData, options)
       .map(res => res.json());
   }
 

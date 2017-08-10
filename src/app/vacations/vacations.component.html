@@ -2,18 +2,30 @@
   Welcomen {{  currentUser  }}
 
 </h1>
-<button (click)="postData()">Save options</button>
+<span>User:</span>
+<div>
+  {{User}}
+</div>
+
+<hr>
+<button (click)="postData()" md-raised-button>Save options</button>
+<button (click)="history()" md-raised-button>History</button>
+
+
   <h3>My Current Trip</h3>
   <p  *ngIf="(currentGetTripObserver$ | async) ">{{ currentGetTripObserver$ | async | json }}</p>
+  <h2>Last Changes</h2>
+  <p  *ngIf="(logUpdates$ | async) ">{{ logUpdates$ | async | json }}</p>
+
+
+
 
 
 <section class="page-content">
   <div class="destinations-container">
       <h2>Travel Packages</h2>
         <div class="refreshContainer">
-          <button (click)="refreshData()">Refresh Data</button>
-
-
+          <button (click)="refreshData()" md-raised-button>Refresh Data</button>
         </div>
         <img *ngIf="!(destinations.length > 0)" class="ajax-loader-boot" src="http://www.hettweb.com/images/loader.gif" alt="">
         <ul class="destinations">
@@ -22,8 +34,12 @@
               <span class="flag {{destination.countryCode}}"></span>
               <span><strong>{{destination.name}}</strong> </span>
               <span>{{destination.duration}} for <span class="currency">$</span><span class="price">{{destination.price}}</span></span>
+              <button (click)="updateData(destination.name, destination.price)" md-raised-button [disabled]="!lastkey">Update my current trip</button>
             </div>
           </li>
         </ul>
   </div>
 </section>
+
+
+
