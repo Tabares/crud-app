@@ -5,7 +5,8 @@ import { BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/mergeMap';
 
 
 import * as _ from 'lodash';
@@ -17,6 +18,7 @@ import * as _ from 'lodash';
   styleUrls: ['./vacations.component.css'],
   providers: [TripsService]
 })
+
 export class VacationsComponent implements OnInit, OnDestroy {
 
   destinations: Array<Trip> = [];
@@ -24,11 +26,15 @@ export class VacationsComponent implements OnInit, OnDestroy {
   private currentGetTripObserver$: BehaviorSubject<any> = new BehaviorSubject(null);
 
   private logUpdates$: ReplaySubject<any> = new ReplaySubject(null);
+  private y$: ReplaySubject<any> = new ReplaySubject(null);
+  private filter$: BehaviorSubject<any> = new BehaviorSubject(null);
 
   public lastkey: string;
 
+  public doctors$: ReplaySubject<any> = new ReplaySubject(null);
+  public doc = new Array<string>();
+
   public user: Observable<any> = this.usersObserver$.asObservable();
-  public user$: Observer<any>;
 
   public currentUser: string;
   constructor(private tripsService: TripsService) { }
@@ -81,16 +87,10 @@ export class VacationsComponent implements OnInit, OnDestroy {
         setTimeout(
           () => {
              this.logUpdates$.next(val);
-             //this.history(val);
-
-          }, 3000
+          }, 7000
         );
 
       });
-  }
-
-  history(v: any) {
-     this.tripsService.x$.subscribe(val => console.log(val) );
   }
 
   getCurrentTrip(url) {
@@ -113,6 +113,16 @@ export class VacationsComponent implements OnInit, OnDestroy {
         return parseInt(d['price'].replace(',', ''), 10);
       }
     );
+  }
+
+  getFilter() {
+    this.tripsService
+      .getTripsServiceFilter()
+      .filter((person) => person.id > 5)
+      .map((person) => 'Dr. ' + person.name)
+      .subscribe((val) => {
+        this.doc.push(val);
+      });
   }
 
   ngOnDestroy() {

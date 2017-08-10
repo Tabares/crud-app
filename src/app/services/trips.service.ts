@@ -6,8 +6,8 @@ import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
 import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-
-
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/mergeMap';
 
 
 @Injectable()
@@ -29,6 +29,9 @@ export class TripsService {
       .map(res => res.json());
   }
 
+  getTripsServiceFilter(): Observable<any>  {
+    return this.http.get('http://jsonplaceholder.typicode.com/users/').flatMap((response) => response.json());
+  }
 
   updateTripService(uri: string, data: any): Observable<any>  {
 

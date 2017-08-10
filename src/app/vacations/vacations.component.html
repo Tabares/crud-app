@@ -9,17 +9,11 @@
 
 <hr>
 <button (click)="postData()" md-raised-button>Save options</button>
-<button (click)="history()" md-raised-button>History</button>
-
 
   <h3>My Current Trip</h3>
   <p  *ngIf="(currentGetTripObserver$ | async) ">{{ currentGetTripObserver$ | async | json }}</p>
   <h2>Last Changes</h2>
   <p  *ngIf="(logUpdates$ | async) ">{{ logUpdates$ | async | json }}</p>
-
-
-
-
 
 <section class="page-content">
   <div class="destinations-container">
@@ -41,5 +35,14 @@
   </div>
 </section>
 
+<section>
+  <h2>Travel Care</h2>
+  <button (click)="getFilter()" md-raised-button>Get available doctors</button>
+  <ul *ngFor="let i of doc"  >
+    <li >{{i}}</li>
+  </ul>
 
+
+
+<section>
 
