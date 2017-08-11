@@ -62,7 +62,6 @@ export class VacationsComponent implements OnInit, OnDestroy {
       },
       (err: any) => console.error('ERROR')
       );
-
   }
 
   postData() {
