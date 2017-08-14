@@ -8,6 +8,7 @@ import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/mergeMap';
+import {AsyncSubject} from 'rxjs/Rx';
 
 
 @Injectable()
@@ -18,6 +19,8 @@ export class TripsService {
 
   private data: Observable<any>;
   private dataObserver: Observer<any>;
+  public latestError: AsyncSubject<string> = new AsyncSubject();
+
 
   constructor(private http: Http) {
     this.data = new Observable(observer => this.dataObserver = observer);
@@ -78,6 +81,15 @@ export class TripsService {
       (err: any) => console.error('loadAllPackages: ERROR'),
       () => console.log('loadAllTrips: always')
     );
+  }
+
+  error() {
+    console.log('error');
+    this.latestError.next('form submitted');
+    this.latestError.next('form submitted 2');
+    this.latestError.next('form submitted 3');
+    this.latestError.complete();
+
   }
 
 }

@@ -1,0 +1,24 @@
+<h1>
+  observables works!
+</h1>
+
+<button (click)="funObservable()" md-raised-button>Observable</button>
+<button (click)="funSubject()" md-raised-button>Subject</button>
+<button (click)="funBehaviorSubject()" md-raised-button>Behavior Subject</button>
+<button (click)="funReplaySubject()" md-raised-button>Replay Subject</button>
+<button (click)="funAsyncSubject()" md-raised-button>Async Subject</button>
+
+
+<p>
+Observable:
+</p>
+<p>
+  {{observer$ | async }}
+<p>
+<br>
+<p>
+ Variable:
+</p>
+<p>
+  {{observerString}}
+</p>

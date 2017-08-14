@@ -3,6 +3,7 @@ import { TripsService } from './../services/trips.service';
 import { Trip } from './trip';
 import { BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
+import { Subject} from 'rxjs/Subject';
 import { Observer } from 'rxjs/Observer';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import 'rxjs/add/operator/filter';
@@ -37,7 +38,22 @@ export class VacationsComponent implements OnInit, OnDestroy {
   public user: Observable<any> = this.usersObserver$.asObservable();
 
   public currentUser: string;
-  constructor(private tripsService: TripsService) { }
+  result: any;
+
+  constructor(private tripsService: TripsService) {
+
+    this.tripsService.latestError.subscribe(
+    err => {
+      console.log('result = ' + err);
+      this.result = err;
+    },
+    err => {
+      console.log('err');
+    },
+    () => {
+      console.log('complete');
+    });
+  }
 
   ngOnInit() {
     this
@@ -57,7 +73,8 @@ export class VacationsComponent implements OnInit, OnDestroy {
       (data: any) => {
         console.log(data);
         this.usersObserver$.next(data);
-        const userInfo = this.usersObserver$.getValue()[0];
+        //const userInfo = this.usersObserver$.getValue()[0];
+        const userInfo =  data[0];
         this.currentUser = userInfo.firstName + ' ' + userInfo.lastName;
       },
       (err: any) => console.error('ERROR')
@@ -122,6 +139,10 @@ export class VacationsComponent implements OnInit, OnDestroy {
       .subscribe((val) => {
         this.doc.push(val);
       });
+  }
+
+  onSubmit() {
+    this.tripsService.error();
   }
 
   ngOnDestroy() {
