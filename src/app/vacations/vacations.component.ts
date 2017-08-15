@@ -37,6 +37,8 @@ export class VacationsComponent implements OnInit, OnDestroy {
 
   public user: Observable<any> = this.usersObserver$.asObservable();
 
+  observer = new BehaviorSubject<any>(null);
+
   public currentUser: string;
   result: any;
 
@@ -71,7 +73,9 @@ export class VacationsComponent implements OnInit, OnDestroy {
 
     this.tripsService.getUsersService().subscribe(
       (data: any) => {
-        console.log(data);
+
+        this.observer.next(data);
+        console.log(this.observer.getValue());
         this.usersObserver$.next(data);
         //const userInfo = this.usersObserver$.getValue()[0];
         const userInfo =  data[0];

@@ -16,7 +16,7 @@ import { AsyncSubject} from 'rxjs/AsyncSubject';
 })
 export class ObservablesComponent implements OnInit {
   behaviorSubject$ = new BehaviorSubject<any>(null);
-  replaySubject$ = new ReplaySubject<any>(3);
+  replaySubject$ = new ReplaySubject<any>(2);
   subject$ = new Subject();
   observable$ = new Observable<any>();
 
@@ -73,20 +73,27 @@ export class ObservablesComponent implements OnInit {
     });
 
     console.log('just before subscribe');
-    observable.subscribe({
-      next: (x) => console.log(),
+    const y =  observable.subscribe({
+      next: (x) => console.log('Print value on the markup: ' + x),
       error: err => console.error('something wrong occurred: ' + err),
       complete: () => console.log('done'),
     });
 
+    //setTimeout(
+      //() => {
+        //y.unsubscribe();
 
-    observable.subscribe(
-     (x) => {
-       console.log('Print value on the markup: ' + x);
-       this.observer$.next(x);
-       this.observerString = x;
-     });
-     console.log('just after subscribe');
+      //}, 2000
+    //);
+
+
+   /// observable.subscribe(
+     ///(x) => {
+      /// console.log('Print value on the markup: ' + x);
+       //this.observer$.next(x);
+      // this.observerString = x;
+     //});
+    console.log('just after subscribe');
   }
 
 
@@ -96,30 +103,83 @@ export class ObservablesComponent implements OnInit {
     A Subject is like an Observable, but can multicast to many Observers.
     Subjects are like EventEmitters: they maintain a registry of many listeners.
     */
-     const newObserver = new Observable(
-       (Observer) => {
-         Observer.next(12);
-       }
-     );
+     ///const newObserver = new Observable(
+      // (Observer) => {
+        // Observer.next(12);
+      // }
+     //);
 
-     newObserver.subscribe(
-      (y) => {
-        this.print('y ', y);
+     //newObserver.subscribe(
+     // (y) => {
+       // this.print('y ', y);
+    //});
+
+    //this.subject$.next(-1);    // 1
+    //this.subject$.subscribe(x => this.print('A: Value from Subject$', x));
+
+
+
+    //this.subject$.subscribe(x => this.print('B: Value from Subject$', x));
+    //this.subject$.next();
+
+    const observable = new Observable( (observer) => {
+      observer.next(1);
+      observer.next(2);
+      observer.next(3);
+      setTimeout(() => {
+        observer.next(4);
+      }, 1000);
+      setTimeout(() => {
+        observer.complete();
+      }, 5000);
+      setInterval(() => {
+        observer.next(Math.floor(Math.random() * (10 - 1) + 1));
+      }, 1000);
     });
 
-    this.subject$.next(-1);    // 1
-    this.subject$.subscribe(x => this.print('A: Value from Subject$', x));
-    this.subject$.subscribe(x => this.print('B: Value from Subject$', x));
-    this.subject$.next(1);    // 1
-    this.subject$.next(2);    // 2
+    console.log('xxxx');
+    observable.subscribe(
+      (x) => {
+       console.log('Print value on the markup: ' + x);
+       this.subject$.next(x);
+       this.observer$.next(x);
 
-    const observable = Observable.from([1, 2, 3]);
+       //this.observerString = x;
+    });
+    console.log('fin xxxx');
+
+    setTimeout(
+      () => {
+        observable.subscribe(
+          (x) => {
+           console.log('Print value on the markup: ________ ' + x);
+           //this.subject$.next(x);
+           //this.observer$.next(x);
+           this.replaySubject$.next(x);
+
+
+        });
+
+      }, 2000
+
+    );
+
+
+
+    ///sub.next(2);
+
+
+    //this.subject$.next(1);    // 1
+    //this.subject$.next(2);    // 2
+
+
+    ///const observable = Observable.from([1, 2, 3]);
     //observable.subscribe(this.subject$);
 
     this.subject$.complete();
-    this.subject$.next(3);    // silently ignored
+    //this.subject$.next(3);    // silently ignored
     //subject$.unsubscribe();
-    this.subject$.next(4);    // Unhandled ObjectUnsubscribedError
+    //this.subject$.next(4);    // Unhandled ObjectUnsubscribedError
   }
 
   funBehaviorSubject() {
@@ -135,6 +195,9 @@ export class ObservablesComponent implements OnInit {
     this.behaviorSubject$.next(2);
     this.behaviorSubject$.next(3);
     this.behaviorSubject$.complete();
+
+    this.behaviorSubject$.subscribe((val) => this.print('Value from Behavior Subject C', val));
+
     this.behaviorSubject$.next(6);
     //this.behaviorSubject$.unsubscribe();
     this.behaviorSubject$.next(9);
@@ -158,6 +221,9 @@ export class ObservablesComponent implements OnInit {
     this.replaySubject$.subscribe((val) => this.print('________Value from Replay Subject', val));
     this.replaySubject$.next(4);
     this.replaySubject$.complete();
+
+    //this.replaySubject$.subscribe((val) => this.print('_____xxxx___Value from Replay Subject', val));
+
     this.replaySubject$.next(6);
     //this.replaySubject$.unsubscribe();
     this.replaySubject$.next(9);
@@ -181,12 +247,29 @@ export class ObservablesComponent implements OnInit {
     subject.next(3);
     subject.next(4);
 
-    subject.subscribe({
-      next: (v) => this.print('observerB: ', v)
+    //subject.subscribe({
+      ///next: (v) => this.print('observerB: ', v)
+    //});
+
+    subject.next(7);
+    subject.complete();
+
+   /* subject.subscribe({
+      next: (v) => this.print('observerC: ', v)
     });
 
-    subject.next(5);
+    subject.next(6);
+
     subject.complete();
+
+    subject.subscribe({
+      next: (v) => this.print('observerD: ', v)
+    });
+
+    subject.next(8);
+
+    subject.complete();
+*/
 
   }
 

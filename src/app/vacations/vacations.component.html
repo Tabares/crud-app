@@ -2,6 +2,15 @@
   Welcomen {{  currentUser  }}
 
 </h1>
+
+
+<h1>
+  {{ usersObserver$  | async |json}}
+</h1>
+
+<h1>
+    {{ observer  | async |json}}
+  </h1>
 <span>User:</span>
 <div>
   {{User}}

@@ -29,7 +29,8 @@ export class TripsService {
   getUsersService(): Observable<any>  {
     return this.http
       .get('https://api.myjson.com/bins/15pf4l')
-      .map(res => res.json());
+      .map(res => res.json())
+      .filter( res => res[0]['firstName'] === 'Jose');
   }
 
   getTripsServiceFilter(): Observable<any>  {
