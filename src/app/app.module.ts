@@ -11,6 +11,9 @@ import { SpotifyComponent } from './spotify/spotify.component';
 import { SearchComponent } from './search/search.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ObservablesComponent } from './observables/observables.component';
+import { XComponent } from './x/x.component';
+import { YComponent } from './folder/y/y.component';
+import { ZComponent } from './folder/z/z.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +21,10 @@ import { ObservablesComponent } from './observables/observables.component';
     VacationsComponent,
     SpotifyComponent,
     SearchComponent,
-    ObservablesComponent
+    ObservablesComponent,
+    XComponent,
+    YComponent,
+    ZComponent
   ],
   imports: [
     BrowserModule,

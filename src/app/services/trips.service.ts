@@ -26,7 +26,7 @@ export class TripsService {
     this.data = new Observable(observer => this.dataObserver = observer);
   }
 
-  getUsersService(): Observable<any>  {
+  getUsersService()  {
     return this.http
       .get('https://api.myjson.com/bins/15pf4l')
       .map(res => res.json())
