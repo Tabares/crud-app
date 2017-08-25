@@ -34,7 +34,8 @@ export class TripsService {
   }
 
   getTripsServiceFilter(): Observable<any>  {
-    return this.http.get('http://jsonplaceholder.typicode.com/users/').flatMap((response) => response.json());
+    return this.http.get('http://jsonplaceholder.typicode.com/users/')
+      .map((response) => response.json());
   }
 
   updateTripService(uri: string, data: any): Observable<any>  {
