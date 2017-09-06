@@ -11,9 +11,10 @@ import { SpotifyComponent } from './spotify/spotify.component';
 import { SearchComponent } from './search/search.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ObservablesComponent } from './observables/observables.component';
-import { XComponent } from './x/x.component';
-import { YComponent } from './folder/y/y.component';
-import { ZComponent } from './folder/z/z.component';
+import { MessageComponent } from './message/message.component';
+import { SenderComponent } from './sender/sender.component';
+import { MessageService } from './services/message.service';
+
 
 @NgModule({
   declarations: [
@@ -22,9 +23,8 @@ import { ZComponent } from './folder/z/z.component';
     SpotifyComponent,
     SearchComponent,
     ObservablesComponent,
-    XComponent,
-    YComponent,
-    ZComponent
+    MessageComponent,
+    SenderComponent
   ],
   imports: [
     BrowserModule,
@@ -40,6 +40,7 @@ import { ZComponent } from './folder/z/z.component';
   providers: [
     BaseRequestOptions,
     HttpModule,
+    MessageService,
     {provide: LocationStrategy, useClass: HashLocationStrategy},
   ],
   bootstrap: [AppComponent]

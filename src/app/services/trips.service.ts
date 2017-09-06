@@ -62,6 +62,16 @@ export class TripsService {
       .map(res => res.json());
   }
 
+  saveTrip2(body, Id): Observable<any> {
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const options = new RequestOptions({ headers: headers });
+   // const url = `${this.urlAPI}/${Id}`;
+
+    return this.http
+      .post('x', body, options)
+      .map(res => res.json());
+  }
+
   getCurrentTrip( url: string ): Observable<any> {
     return this.http
       .get( url )
