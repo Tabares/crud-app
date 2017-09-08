@@ -1,0 +1,63 @@
+<h1>
+  Welcomen {{  currentUser  }}
+
+</h1>
+
+
+<h1>
+  {{ usersObserver$  | async |json}}
+</h1>
+
+<h1>
+    {{ observer  | async |json}}
+  </h1>
+<span>User:</span>
+<div>
+  {{User}}
+</div>
+
+<hr>
+<button (click)="postData()" md-raised-button>Save options</button>
+
+  <h3>My Current Trip</h3>
+  <p  *ngIf="(currentGetTripObserver$ | async) ">{{ currentGetTripObserver$ | async | json }}</p>
+  <h2>Last Changes</h2>
+  <p  *ngIf="(logUpdates$ | async) ">{{ logUpdates$ | async | json }}</p>
+
+<section class="page-content">
+  <div class="destinations-container">
+      <h2>Travel Packages</h2>
+        <div class="refreshContainer">
+          <button (click)="refreshData()" md-raised-button>Refresh Data</button>
+        </div>
+        <img *ngIf="!(destinations.length > 0)" class="ajax-loader-boot" src="http://www.hettweb.com/images/loader.gif" alt="">
+        <ul class="destinations">
+          <li *ngFor="let destination of destinations" class="destination">
+            <div class="box destination-wrapper">
+              <span class="flag {{destination.countryCode}}"></span>
+              <span><strong>{{destination.name}}</strong> </span>
+              <span>{{destination.duration}} for <span class="currency">$</span><span class="price">{{destination.price}}</span></span>
+              <button (click)="updateData(destination.name, destination.price)" md-raised-button [disabled]="!lastkey">Update my current trip</button>
+            </div>
+          </li>
+        </ul>
+  </div>
+</section>
+
+<section>
+  <h2>Travel Care</h2>
+  <button (click)="getFilter()" md-raised-button>Get available doctors</button>
+  <ul *ngFor="let i of doc"  >
+    <li >{{i}}</li>
+  </ul>
+
+
+
+</section>
+<hr>
+<section>
+  <form (ngSubmit)="onSubmit()">
+    Result : {{result}}
+    <button type="submit" md-raised-button>Submit</button>
+  </form>
+</section>

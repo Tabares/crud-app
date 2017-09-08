@@ -1,0 +1,11 @@
+ <h1>Spotify Search</h1>
+
+ <div>{{results | json}}</div>
+<div [formGroup]="customerForm">
+
+ <input
+      formControlName="searchBox"
+      placeholder="Search Spotify artist"
+      value="Molotov" />
+
+</div>
